@@ -1,24 +1,25 @@
 "use client";
 
-import fetchFromCMS from "@/app/get";
-import { REMOVE_FROM_CART } from "@/mutations/cart";
-import { CartItem as CartItemType } from "@/types/product";
 import { Button } from "@nextui-org/react";
 import { Delete01Icon } from "hugeicons-react";
 import Link from "next/link";
 import { useState } from "react";
-import { ToastContainer, toast } from "react-toastify";
+
+import { CartItem as CartItemType } from "@/types/product";
+import { REMOVE_FROM_CART } from "@/mutations/cart";
+import fetchFromCMS from "@/app/get";
 
 const CartItemUI = ({
   item,
   handleDelete,
-  loading,
   setLoading,
+  readOnly,
 }: {
   item: CartItemType;
   handleDelete: (id: string) => void;
   loading?: boolean;
   setLoading: (loading: boolean) => void;
+  readOnly?: boolean;
 }) => {
   const [quantity, setQuantity] = useState(item.quantity);
   const [length, setLength] = useState(item.length);
@@ -30,8 +31,9 @@ const CartItemUI = ({
 
   const handleLengthChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedLength = item.product.lengths.find(
-      (l) => l.value.toString() === e.target.value
+      (l) => l.value.toString() === e.target.value,
     );
+
     if (selectedLength) {
       setLength(selectedLength);
     }
@@ -39,15 +41,15 @@ const CartItemUI = ({
 
   const handleColorChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedColor = item.product.colors.find(
-      (c) => c.slug === e.target.value
+      (c) => c.slug === e.target.value,
     );
+
     if (selectedColor) {
       setColor(selectedColor);
     }
   };
 
   const handleRemoveItem = async () => {
-    console.log("Removing item:", item.id);
     if (confirm("Are you sure you want to remove this item from your cart?")) {
       setLoading(true);
       const { updateCart, deleteCartItem } = await fetchFromCMS(
@@ -66,8 +68,9 @@ const CartItemUI = ({
           deleteCartItemWhere2: {
             id: item.id,
           },
-        }
+        },
       );
+
       if (updateCart && deleteCartItem) {
         handleDelete(deleteCartItem.id);
       }
@@ -77,64 +80,72 @@ const CartItemUI = ({
 
   return (
     <div className="flex items-end justify-between border-b py-4">
-      <ToastContainer />
       <div className="flex items-start space-x-4">
         <img
-          src={item.product.image[0].image.publicUrl}
           alt={item.product.name}
           className="w-16 h-16 rounded-md"
+          src={item.product.image[0].image.publicUrl}
         />
         <div>
-          <div className="max-w-96 mb-4" title={item.product.name}>
-            <h3 className="text-lg font-medium text-ellipsis line-clamp-1">
+          <div className="mb-4" title={item.product.name}>
+            <h3 className="text-lg font-medium line-clamp-1">
               <Link
-                href={`/products/${item.product.slug}`}
                 className="hover:underline"
+                href={`/products/${item.product.slug}`}
               >
                 {item.product.name}
               </Link>
             </h3>
             <p className="text-sm text-opacity-50">Length: {length.name}</p>
             <p className="text-sm text-opacity-50">Color: {color.name}</p>
+            {readOnly && (
+              <p className="text-sm text-opacity-50">
+                Quantity: {item.quantity} grams
+              </p>
+            )}
           </div>
-          <div className="flex items-center space-x-4">
-            <div className="flex items-center">
-              <input
-                value={quantity}
-                onChange={handleQuantityChange}
-                min={1}
-                className="w-14"
-              />
-              gms
+          {!readOnly && (
+            <div className="flex items-center space-x-4">
+              <div className="flex items-center">
+                <input
+                  className="w-14"
+                  min={1}
+                  value={quantity}
+                  onChange={handleQuantityChange}
+                />
+                gms
+              </div>
+              <select
+                className="w-32"
+                value={length.value}
+                onChange={handleLengthChange}
+              >
+                {item.product.lengths.map((l) => (
+                  <option key={l.id} value={l.value}>
+                    {l.name}
+                  </option>
+                ))}
+              </select>
+              <select
+                className="w-32"
+                value={color.slug}
+                onChange={handleColorChange}
+              >
+                {item.product.colors.map((c) => (
+                  <option key={c.id} value={c.slug}>
+                    {c.name}
+                  </option>
+                ))}
+              </select>
             </div>
-            <select
-              value={length.value}
-              onChange={handleLengthChange}
-              className="w-32"
-            >
-              {item.product.lengths.map((l) => (
-                <option key={l.id} value={l.value}>
-                  {l.name}
-                </option>
-              ))}
-            </select>
-            <select
-              value={color.slug}
-              onChange={handleColorChange}
-              className="w-32"
-            >
-              {item.product.colors.map((c) => (
-                <option key={c.id} value={c.slug}>
-                  {c.name}
-                </option>
-              ))}
-            </select>
-          </div>
+          )}
         </div>
       </div>
-      <Button color="danger" onClick={handleRemoveItem} className="mx-4">
-        <Delete01Icon className="w-5 h-5" />
-      </Button>
+      {!readOnly && (
+        <Button className="mx-4" color="danger" onClick={handleRemoveItem}>
+          <Delete01Icon className="w-5 h-5" />
+        </Button>
+      )}
     </div>
   );
 };

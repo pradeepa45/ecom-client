@@ -1,17 +1,20 @@
+import { Card, CardBody } from "@nextui-org/react";
+
+import CartItemsList from "./list";
+
 import fetchFromCMS from "@/app/get";
 import {
   CREATE_USER_CART,
   GET_CART_ITEMS,
   GET_USER_CART,
 } from "@/mutations/cart";
-import { Button, Card, CardBody, CardHeader } from "@nextui-org/react";
 import { getUserInfo } from "@/app/user";
-import CartItemsList from "./list";
 
 export default async function Cart() {
   const { authenticatedItem: user } = await getUserInfo();
 
   let cartId;
+
   if (!user) {
     return (
       <div>
@@ -41,6 +44,7 @@ export default async function Cart() {
         },
       },
     });
+
     cartId = createCart.id;
   } else if (carts.length !== 0) {
     cartId = carts[0].id;
@@ -61,7 +65,7 @@ export default async function Cart() {
   }
 
   return (
-    <div>
+    <div className="flex flex-col mb-20 gap-4">
       <Card fullWidth>
         <CardBody>
           <CartItemsList cart={cartItems} />

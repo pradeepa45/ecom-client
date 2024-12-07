@@ -14,8 +14,8 @@ export const siteConfig = {
     },
     {
       label: "Contact",
-      href: "/contact"
-    }
+      href: "/contact",
+    },
   ],
   navMenuItems: [
     {
@@ -51,6 +51,6 @@ export const siteConfig = {
     sponsor: process.env.NEXT_PUBLIC_CMS_URL,
     login: "/login",
     signup: "/signup",
-    logout: '/logout'
+    logout: "/logout",
   },
 };

@@ -8,22 +8,32 @@ import {
 } from "hugeicons-react";
 import Link from "next/link";
 
-import ProductListing from "@/components/common/products/list";
 import fetchFromCMS from "./get";
+
+import ProductListing from "@/components/common/products/list";
 import { getTestimonials } from "@/queries/testimonials";
 import { Testimonial } from "@/types";
 import TestimonialCard from "@/components/common/testimonials/card";
+import { Suspense } from "react";
+import Loader from "@/components/loader";
+import { getProducts } from "@/queries/products";
+import { Button } from "@nextui-org/button";
 
-const HairSalonLanding = async () => {
+const App = async () => {
   const { testimonials } = await fetchFromCMS(getTestimonials, {
-    variables: {
-      take: 3,
+    take: 3,
+  });
+
+  const { products } = await fetchFromCMS(getProducts, {
+    where: {
+      status: {
+        in: ["available", "AVAILABLE"],
+      },
     },
   });
 
   return (
     <div>
-      {/* Hero Section */}
       <div className="relative h-screen">
         <div className="absolute inset-0 bg-black/40" />
         <div className="h-full flex items-center justify-center text-center relative">
@@ -41,7 +51,6 @@ const HairSalonLanding = async () => {
         </div>
       </div>
 
-      {/* Services Section */}
       <div className="py-20">
         <div className="max-w-6xl mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-12">Our Services</h2>
@@ -66,17 +75,20 @@ const HairSalonLanding = async () => {
         </div>
       </div>
 
-      {/* Gallery Section */}
       <div className="py-20">
         <div className="max-w-6xl mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-12">
             Our Popular Products
           </h2>
-          <ProductListing />
+          <Suspense fallback={<Loader />}>
+            <ProductListing products={products} />
+            <Button>
+              <Link href="/products/all">View all</Link>
+            </Button>
+          </Suspense>
         </div>
       </div>
 
-      {/* Testimonials */}
       <div className="py-20">
         <div className="max-w-6xl mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-12">
@@ -90,7 +102,6 @@ const HairSalonLanding = async () => {
         </div>
       </div>
 
-      {/* Contact Section */}
       <div className="py-20">
         <div className="max-w-6xl mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-12">Visit Us</h2>
@@ -124,8 +135,8 @@ const HairSalonLanding = async () => {
             </div>
           </div>
           <Link
-            href="/contact"
             className="mx-auto py-2 px-4 rounded-lg border block w-fit shadow-sm"
+            href="/contact"
           >
             Send us a message
           </Link>
@@ -177,19 +188,4 @@ const services = [
   },
 ];
 
-const testimonials = [
-  {
-    text: "Best salon experience I've ever had. The attention to detail is remarkable.",
-    name: "Sarah Johnson",
-  },
-  {
-    text: "Transformed my hair completely. Couldn't be happier with the results!",
-    name: "Michael Chen",
-  },
-  {
-    text: "Professional, friendly, and incredibly skilled. Highly recommend!",
-    name: "Emma Davis",
-  },
-];
-
-export default HairSalonLanding;
+export default App;

@@ -15,19 +15,13 @@ export default function Footer() {
             <h3 className="text-xl font-bold mb-4">Quick Links</h3>
             <ul className="space-y-2">
               <li>
-                <a href="#" className="text-gray-400 hover:text-white">
-                  Services
-                </a>
+                <span className="text-gray-400 hover:text-white">Services</span>
               </li>
               <li>
-                <a href="#" className="text-gray-400 hover:text-white">
-                  Gallery
-                </a>
+                <span className="text-gray-400 hover:text-white">Gallery</span>
               </li>
               <li>
-                <a href="#" className="text-gray-400 hover:text-white">
-                  Book Now
-                </a>
+                <span className="text-gray-400 hover:text-white">Book Now</span>
               </li>
             </ul>
           </div>

@@ -17,10 +17,10 @@ export default function Loader() {
   return (
     <CircularProgress
       aria-label="Loading..."
-      size="lg"
-      value={value}
       color="primary"
       showValueLabel={true}
+      size="lg"
+      value={value}
     />
   );
 }

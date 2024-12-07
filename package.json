@@ -3,12 +3,8 @@
 	"version": "0.0.1",
 	"private": true,
 	"scripts": {
-		"keystone:dev": "cd cms && keystone dev",
-		"keystone:build": "keystone build",
-		"keystone:start": "keystone start",
 		"dev": "next dev -p 4000",
-		"next:build": "next build",
-		"build": "keystone build --no-ui && next build",
+		"build": "next build",
 		"start": "next start",
 		"lint": "eslint . --ext .ts,.tsx -c .eslintrc.json --fix"
 	},
@@ -35,6 +31,7 @@
 		"hugeicons-react": "^0.3.0",
 		"intl-messageformat": "^10.5.0",
 		"lodash": "^4.17.21",
+		"moment": "^2.30.1",
 		"next": "14.2.4",
 		"next-themes": "^0.2.1",
 		"react": "18.3.1",

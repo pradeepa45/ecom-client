@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { ThemeProviderProps } from "next-themes/dist/types";
 import { ApolloProvider } from "@apollo/client";
+
 import client from "@/lib/client";
 
 export interface ProvidersProps {

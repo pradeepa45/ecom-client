@@ -1,5 +1,6 @@
 import { SVGProps } from "react";
-import { Cart } from "./product"
+
+import { Cart } from "./product";
 
 export type IconSvgProps = SVGProps<SVGSVGElement> & {
   size?: number;
@@ -20,6 +21,5 @@ export interface User {
   isCustomer: boolean;
   isAdmin: boolean;
   email: string;
-  cart: Cart
+  cart: Cart;
 }
-

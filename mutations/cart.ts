@@ -4,7 +4,7 @@ export const CREATE_USER_CART = `
     id
   }
 }
-`
+`;
 
 export const GET_USER_CART = `
   query Carts($where: CartWhereInput!) {
@@ -12,11 +12,12 @@ export const GET_USER_CART = `
     id
   }
 }
-`
+`;
 
 export const GET_CART_ITEMS = `
 query Cart($where: CartWhereUniqueInput!) {
   cart(where: $where) {
+    id
     itemsCount
     items {
       id
@@ -60,14 +61,14 @@ query Cart($where: CartWhereUniqueInput!) {
     }
   }
 }
-`
+`;
 
 export const UPDATE_CART = `
 mutation UpdateCart($where: CartWhereUniqueInput!, $data: CartUpdateInput!) {
   updateCart(where: $where, data: $data) {
     itemsCount
   }
-}`
+}`;
 
 export const REMOVE_FROM_CART = `
   mutation UpdateCart(
@@ -81,4 +82,4 @@ export const REMOVE_FROM_CART = `
     deleteCartItem(where: $deleteCartItemWhere2) {
       id
     }
-}`
+}`;

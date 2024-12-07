@@ -11,6 +11,7 @@ export function useForm<T>({ initialValues, onSubmit }: UseFormProps<T>) {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+
     setValues((prevValues) => ({
       ...prevValues,
       [name]: value,

@@ -1,13 +1,20 @@
+import fetchFromCMS from "@/app/get";
 import ProductListing from "@/components/common/products/list";
+import Loader from "@/components/loader";
+import { getProducts } from "@/queries/products";
+import { Suspense } from "react";
 
 export default async function Products() {
+  const { products } = await fetchFromCMS(getProducts, {
+    where: {
+      status: {
+        in: ["available", "AVAILABLE"],
+      },
+    },
+  });
   return (
-    <>
-      {/* <div className="flex my-6 gap-6 border rounded-lg p-6">
-        <MultiSelectFilter options={lengths} placeholder="Select lengths" />
-        <MultiSelectFilter options={colors} placeholder="Select colors" />
-      </div> */}
-      <ProductListing />
-    </>
+    <Suspense fallback={<Loader />}>
+      <ProductListing products={products} />
+    </Suspense>
   );
 }

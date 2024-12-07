@@ -12,7 +12,7 @@ import {
 function makeClient() {
   const CMS_URL = new URL(
     "/api/graphql",
-    process.env.NEXT_PUBLIC_CMS_URL
+    process.env.NEXT_PUBLIC_CMS_URL,
   ).toString();
 
   const httpLink = new HttpLink({

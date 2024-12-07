@@ -1,12 +1,18 @@
-import { Product } from "@/types/product";
 import Tag from "../../tag";
-import Rating from "@/components/common/products/rating";
+
 import AddToCartForm from "./addToCartForm";
-import { getUserInfo } from "@/app/user";
 
-export default async function ProductPage({ product }: { product: Product }) {
-  const { authenticatedItem: user } = await getUserInfo();
+import { Product } from "@/types/product";
+import Rating from "@/components/common/products/rating";
+import { User } from "@/types";
 
+export default function ProductPage({
+  product,
+  user,
+}: {
+  product: Product;
+  user: User;
+}) {
   return (
     <div className="flex flex-col gap-8 p-6 rounded-lg mx-auto mb-20">
       <h2 className="text-3xl font-bold mb-2">{product.name}</h2>
@@ -15,12 +21,12 @@ export default async function ProductPage({ product }: { product: Product }) {
           <div className="grid grid-cols-2 gap-4">
             {product.image.map((item) => (
               <img
-                src={item.image.publicUrl}
+                key={item.id}
                 alt={item.altText}
                 className="h-full mt-4 rounded-lg shadow-md"
                 height={200}
+                src={item.image.publicUrl}
                 width={350}
-                key={item.id}
               />
             ))}
           </div>
@@ -43,7 +49,7 @@ export default async function ProductPage({ product }: { product: Product }) {
           <p className="mb-4">{product.description}</p>
 
           {product.status.toLowerCase() === "available" && (
-            <AddToCartForm product={product} isAuthenticated={user} />
+            <AddToCartForm isAuthenticated={user} product={product} />
           )}
         </div>
       </div>

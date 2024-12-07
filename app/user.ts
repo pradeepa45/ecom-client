@@ -1,22 +1,7 @@
 import { cookies } from "next/headers";
-import { CMS_URL } from "./api/auth/signup/route";
 
-export const authenticatedUser = `
-  query User {
-    authenticatedItem {
-      ... on User {
-        id
-        name
-        email
-        isAdmin
-        isCustomer
-        cart {
-          id
-        }
-      }
-    }
-  }
-`;
+import { CMS_URL } from "@/constants";
+import { authenticatedUser } from "@/queries/user";
 
 export async function getUserInfo() {
   const cookieStore = cookies();
@@ -43,7 +28,9 @@ export async function getUserInfo() {
   if (!res.ok) {
     console.error(`Error: ${res.status} - ${res.statusText}`);
     const errorText = await res.text();
+
     console.error(errorText);
+
     return {
       error: "Failed to fetch user data",
       status: res.status,

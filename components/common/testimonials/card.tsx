@@ -1,5 +1,6 @@
-import { Testimonial } from "@/types";
 import Rating from "../products/rating";
+
+import { Testimonial } from "@/types";
 
 export default function TestimonialCard({
   testimonial,

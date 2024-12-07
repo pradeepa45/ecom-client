@@ -2,6 +2,74 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --background: #fff;
+  --foreground: #000;
+  --link-default: #fed;
+  --link-hover: #fdd;
+  --primary-default: #7547AF;
+  --primary-hover: #6c3ebf;
+  --primary-disabled: #7547AF;
+  --primary-foreground: #fff;
+  --secondary-default: #ABA6F3;
+  --secondary-hover: #A4A1F7;
+  --secondary-disabled: #ABA6F3;
+  --secondary-foreground: #000;
+  --warning-default: #FFC080;
+  --warning-hover: #FFA07A;
+  --warning-disabled: #FFC080;
+  --warning-foreground: #000;
+  --error-default: #FF3737;
+  --error-hover: #FF5C5C;
+  --error-disabled: #FF3737;
+  --error-foreground: #fff;
+  --success-default: #34C759;
+  --success-hover: #34C759;
+  --success-disabled: #34C759;
+  --success-foreground: #fff;
+  --info-default: #4CAF50;
+  --info-hover: #4CAF50;
+  --info-disabled: #4CAF50;
+  --info-foreground: #fff;
+  --border: #eaeaea;
+  --shadow: #eaeaea;
+}
+/* dark theme from browser */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #2f2f2f;
+    --foreground: #fff;
+    --link-default: #fed;
+    --link-hover: #fdd;
+    --primary-default: #6c3ebf;
+    --primary-hover: #7547AF;
+    --primary-disabled: #6c3ebf;
+    --primary-foreground: #fff;
+    --secondary-default: #A4A1F7;
+    --secondary-hover: #ABA6F3;
+    --secondary-disabled: #A4A1F7;
+    --secondary-foreground: #000;
+    --warning-default: #FFA07A;
+    --warning-hover: #FFC080;
+    --warning-disabled: #FFA07A;
+    --warning-foreground: #000;
+    --error-default: #FF5C5C;
+    --error-hover: #FF3737;
+    --error-disabled: #FF5C5C;
+    --error-foreground: #fff;
+    --success-default: #34C759;
+    --success-hover: #34C759;
+    --success-disabled: #34C759;
+    --success-foreground: #fff;
+    --info-default: #4CAF50;
+    --info-hover: #4CAF50;
+    --info-disabled: #4CAF50;
+    --info-foreground: #fff;
+    --border: #333;
+    --shadow: #333;
+  }
+}
+
 .swiper {
   width: 100%;
   height: 100%;

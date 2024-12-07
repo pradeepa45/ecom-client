@@ -1,5 +1,6 @@
-import { title } from "@/components/primitives";
 import Image from "next/image";
+
+import { title } from "@/components/primitives";
 
 export default function AboutPage() {
   return (
@@ -12,11 +13,11 @@ export default function AboutPage() {
       </p>
       <div className="my-4">
         <Image
-          src="https://res.cloudinary.com/p-seelam/image/upload/v1730902312/office-1_qbgkwq.jpg"
           alt="about"
           className="w-full h-auto rounded-lg"
-          width={800}
           height={400}
+          src="https://res.cloudinary.com/p-seelam/image/upload/v1730902312/office-1_qbgkwq.jpg"
+          width={800}
         />
       </div>
       <h1 className={title()}>Our mission</h1>

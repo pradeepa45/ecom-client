@@ -5,9 +5,10 @@ import { Input } from "@nextui-org/input";
 import Link from "next/link";
 
 import { useForm } from "@/hooks/useForm";
+import { Card, CardBody, CardHeader } from "@nextui-org/react";
 
 export default function SignupPage() {
-  async function handelSignup({
+  async function handleSignup({
     name,
     email,
     password,
@@ -22,63 +23,74 @@ export default function SignupPage() {
       body: JSON.stringify({ name, email, password }),
     });
     const data = await response.json();
-    if (data.error) {
-      alert(data.error);
+
+    if (response.ok) {
+      window.location.href = `${process.env.NEXT_PUBLIC_BASE_URL}/dashboard`;
     } else {
-      alert("Signup successful");
+      alert("Login unsuccessful");
     }
   }
   const { values, handleChange, handleSubmit, loading } = useForm({
     initialValues: { name: "", email: "", password: "" },
-    onSubmit: handelSignup,
+    onSubmit: handleSignup,
   });
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="lg:max-w-lg lg:mx-auto mx-4 flex flex-col gap-4 border rounded-lg shadow-md p-4 mb-12"
-    >
-      <Input
-        type="text"
-        label="Enter your name"
-        placeholder="Name"
-        name="name"
-        value={values.name}
-        required
-        onChange={handleChange}
-      />
-      <Input
-        type="email"
-        label="Enter your email"
-        placeholder="Email"
-        name="email"
-        required
-        value={values.email}
-        onChange={handleChange}
-      />
-      <Input
-        type="password"
-        label="Enter your password"
-        placeholder="Password"
-        name="password"
-        value={values.password}
-        required
-        onChange={handleChange}
-      />
-      <div className="flex items-center justify-between">
-        <Link href="/login" className="text-sm underline hover:underline-none">
-          Have an account already?
-        </Link>
-        <Link
-          href="/forgot-password"
-          className="text-sm underline hover:underline-none"
+    <Card className="flex flex-col p-4 mb-12 mx-auto w-fit">
+      <CardHeader>
+        <h2 className="text-center text-2xl">Create a new</h2>
+      </CardHeader>
+      <CardBody className="block lg:min-w-96">
+        <form
+          className="flex flex-col gap-4 rounded-lg self-center"
+          onSubmit={handleSubmit}
         >
-          Forgot password?
-        </Link>
-      </div>
-      <Button type="submit" disabled={loading}>
-        {loading ? "Signing up..." : "Sign Up"}
-      </Button>
-    </form>
+          <Input
+            required
+            label="Enter your name"
+            name="name"
+            placeholder="Name"
+            type="text"
+            value={values.name}
+            onChange={handleChange}
+          />
+          <Input
+            required
+            label="Enter your email"
+            name="email"
+            placeholder="Email"
+            type="email"
+            value={values.email}
+            onChange={handleChange}
+          />
+          <Input
+            required
+            label="Enter your password"
+            name="password"
+            placeholder="Password"
+            type="password"
+            value={values.password}
+            onChange={handleChange}
+          />
+          <div className="flex items-center justify-between">
+            <Link
+              className="text-sm underline hover:underline-none"
+              href="/login"
+            >
+              Have an account already?
+            </Link>
+            <Link
+              className="text-sm underline hover:underline-none"
+              href="/forgot-password"
+            >
+              Forgot password?
+            </Link>
+          </div>
+          <Button disabled={loading} type="submit" isLoading={loading}>
+            {loading ? "Signing up..." : "Sign Up"}
+          </Button>
+        </form>
+      </CardBody>
+    </Card>
   );
 }

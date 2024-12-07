@@ -1,16 +1,15 @@
 import "@/styles/globals.css";
 import { Metadata, Viewport } from "next";
 import clsx from "clsx";
+import { Suspense } from "react";
+import "react-toastify/dist/ReactToastify.css";
 
 import { Providers } from "./providers";
-
+import { ApolloWrapper } from "./ApolloWrapper";
 import { siteConfig } from "@/config/site";
 import { fontSans } from "@/config/fonts";
-import { Navbar } from "@/components/semantic/navbar";
-import { ApolloWrapper } from "./ApolloWrapper";
 import Footer from "@/components/semantic/footer";
-
-import "react-toastify/dist/ReactToastify.css";
+import Navbar from "@/components/semantic/navbar";
 
 export const metadata: Metadata = {
   title: {
@@ -46,13 +45,15 @@ export default function RootLayout({
           )}
         >
           <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
-            <div className="relative flex flex-col min-h-screen">
-              <Navbar />
+            <div className="relative flex flex-col">
+              <Suspense fallback={<div>Loading...</div>}>
+                <Navbar />
+              </Suspense>
               <main className="container mx-auto max-w-7xl pt-16 px-6 flex-grow">
                 {children}
               </main>
-              <Footer />
             </div>
+            <Footer />
           </Providers>
         </body>
       </ApolloWrapper>

@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Navbar as NextUINavbar,
   NavbarContent,
@@ -8,42 +10,68 @@ import {
   NavbarMenuItem,
 } from "@nextui-org/navbar";
 import { Button } from "@nextui-org/button";
-import { Kbd } from "@nextui-org/kbd";
 import { Link } from "@nextui-org/link";
-import { Input } from "@nextui-org/input";
 import { link as linkStyles } from "@nextui-org/theme";
 import NextLink from "next/link";
 import clsx from "clsx";
+import { UserIcon } from "hugeicons-react";
+import { useEffect, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
 
 import { siteConfig } from "@/config/site";
 import { ThemeSwitch } from "@/components/theme-switch";
-import { GithubIcon, SearchIcon, Logo } from "@/components/icons";
-import { UserIcon } from "hugeicons-react";
+import { GithubIcon, Logo } from "@/components/icons";
 import UserAvatar from "@/components/common/user";
-import { getUserInfo } from "@/app/user";
+import { Skeleton } from "@nextui-org/react";
+import UserAvatarSkeleton from "@/components/userSkeleton"
 
-export const Navbar = async () => {
-  const { authenticatedItem: user } = await getUserInfo();
-  const searchInput = (
-    <Input
-      aria-label="Search"
-      classNames={{
-        inputWrapper: "bg-default-100",
-        input: "text-sm",
-      }}
-      endContent={
-        <Kbd className="hidden lg:inline-block" keys={["command"]}>
-          K
-        </Kbd>
+export default function Navbar() {
+  const [user, setUser] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const pathname = usePathname();
+
+  const fetchUser = async () => {
+    try {
+      setIsLoading(true);
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/user`,
+        {
+          credentials: "include", // Important for handling cookies
+        }
+      );
+
+      if (!res.ok) {
+        throw new Error("Failed to fetch user");
       }
-      labelPlacement="outside"
-      placeholder="Search..."
-      startContent={
-        <SearchIcon className="text-base text-default-400 pointer-events-none flex-shrink-0" />
+
+      const { user } = await res.json();
+      if (user?.id) {
+        setUser(user);
+      } else {
+        setUser(null);
       }
-      type="search"
-    />
-  );
+    } catch (error) {
+      console.error("Error fetching user:", error);
+      setUser(null);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchUser();
+  }, [pathname]);
+
+  useEffect(() => {
+    const handleAuthEvent = () => {
+      fetchUser();
+    };
+
+    window.addEventListener("auth-state-change", handleAuthEvent);
+    return () => {
+      window.removeEventListener("auth-state-change", handleAuthEvent);
+    };
+  }, []);
 
   return (
     <NextUINavbar maxWidth="xl" position="sticky">
@@ -69,20 +97,6 @@ export const Navbar = async () => {
               </NextLink>
             </NavbarItem>
           ))}
-          {user && (
-            <NavbarItem>
-              <NextLink
-                className={clsx(
-                  linkStyles({ color: "foreground" }),
-                  "data-[active=true]:text-primary data-[active=true]:font-medium"
-                )}
-                color="foreground"
-                href="/dashboard"
-              >
-                Dashboard
-              </NextLink>
-            </NavbarItem>
-          )}
         </ul>
       </NavbarContent>
       <NavbarContent
@@ -92,9 +106,10 @@ export const Navbar = async () => {
         <NavbarItem className="hidden sm:flex gap-2">
           <ThemeSwitch />
         </NavbarItem>
-        {/* <NavbarItem className="hidden lg:flex">{searchInput}</NavbarItem> */}
         <NavbarItem className="hidden md:flex">
-          {user ? (
+          {isLoading ? (
+            <UserAvatarSkeleton />
+          ) : user ? (
             <UserAvatar user={user} />
           ) : (
             <Button
@@ -117,9 +132,7 @@ export const Navbar = async () => {
         <ThemeSwitch />
         <NavbarMenuToggle />
       </NavbarContent>
-
       <NavbarMenu>
-        {/* {searchInput} */}
         <div className="mx-4 mt-2 flex flex-col gap-2">
           {siteConfig.navMenuItems.map((item, index) => (
             <NavbarMenuItem key={`${item}-${index}`}>
@@ -142,4 +155,4 @@ export const Navbar = async () => {
       </NavbarMenu>
     </NextUINavbar>
   );
-};
+}
